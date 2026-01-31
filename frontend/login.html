@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Escape Room - Enter If You Dare</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Cinzel:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="login-styles.css">
+</head>
+
+<body>
+    <!-- Animated Background Elements -->
+    <div class="fog-layer fog-1"></div>
+    <div class="fog-layer fog-2"></div>
+    <div class="fog-layer fog-3"></div>
+
+    <!-- Floating Puzzle Pieces -->
+    <div class="puzzle-piece puzzle-1">🧩</div>
+    <div class="puzzle-piece puzzle-2">🔑</div>
+    <div class="puzzle-piece puzzle-3">🗝️</div>
+    <div class="puzzle-piece puzzle-4">⚙️</div>
+
+    <!-- Main Container -->
+    <div class="login-container">
+        <!-- Lock Animation -->
+        <div class="lock-container">
+            <div class="lock-body">
+                <div class="lock-shackle"></div>
+                <div class="keyhole">🔓</div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h1 class="title">
+            <span class="glitch" data-text="ESCAPE ROOM">ESCAPE ROOM</span>
+        </h1>
+        <p class="subtitle">⏱️ The Clock is Ticking... Enter Your Credentials ⏱️</p>
+
+        <!-- Timer Display -->
+        <div class="timer-display">
+            <div class="timer-segment">
+                <span id="hours">00</span>
+                <span class="timer-label">HOURS</span>
+            </div>
+            <span class="timer-separator">:</span>
+            <div class="timer-segment">
+                <span id="minutes">60</span>
+                <span class="timer-label">MINUTES</span>
+            </div>
+            <span class="timer-separator">:</span>
+            <div class="timer-segment">
+                <span id="seconds">00</span>
+                <span class="timer-label">SECONDS</span>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="login-form">
+            <div class="form-group">
+                <label for="username">
+                    <span class="icon">👤</span> USERNAME
+                </label>
+                <input type="text" id="username" placeholder="Enter your codename..." autocomplete="username" required>
+                <div class="input-glow"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <span class="icon">🔐</span> PASSWORD
+                </label>
+                <input type="password" id="password" placeholder="Enter the secret code..." autocomplete="current-password" required>
+                <div class="input-glow"></div>
+                <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="error-message"></div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">
+                <span class="btn-text">UNLOCK THE ROOM</span>
+                <span class="btn-icon">🔓</span>
+            </button>
+        </form>
+
+        <!-- Hints Section -->
+        <div class="hints-section">
+            <p class="hint">🔐 <strong>Authorized Agents Only:</strong></p>
+            <p class="hint">👤 <strong>Agent Salma:</strong> salma / 123456</p>
+            <p class="hint">👤 <strong>Agent Marwa:</strong> marwa / marwa</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-text">
+            <p>⚠️ WARNING: Once you enter, there's no turning back ⚠️</p>
+            <p class="small">Black-Box Testing Project - Software Testing Course</p>
+        </div>
+    </div>
+
+    <!-- Particle Effects -->
+    <canvas id="particles"></canvas>
+
+    <script src="login.js"></script>
+</body>
+
+</html>
+

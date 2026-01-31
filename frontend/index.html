@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Escape Room Management - The Testing Chamber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Atmospheric Background Elements -->
+    <div class="fog-overlay"></div>
+    <div class="puzzle-float puzzle-1">🧩</div>
+    <div class="puzzle-float puzzle-2">🔑</div>
+    <div class="puzzle-float puzzle-3">🗝️</div>
+    <div class="puzzle-float puzzle-4">⚙️</div>
+    <div class="puzzle-float puzzle-5">🔓</div>
+
+    <div class="container">
+        <header>
+            <!-- User Info & Logout -->
+            <div class="user-bar">
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span id="username-display">Agent</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <span>🚪 EXIT ROOM</span>
+                </button>
+            </div>
+
+            <h1 class="main-title">
+                <span class="title-icon">🔐</span>
+                <span class="glitch-title" data-text="ESCAPE ROOM">ESCAPE ROOM</span>
+                <span class="title-icon">🔐</span>
+            </h1>
+            <p class="subtitle-main">⚡ THE TESTING CHAMBER ⚡</p>
+            <p class="subtitle-desc">Validate Your Escape - Test Your Limits</p>
+
+            <!-- DYNAMIC EXECUTION TRACE (LIVE DECISION TABLE) -->
+            <div id="dynamic-dashboard" class="dashboard-v2" style="display: none;">
+                <div class="card exec-card">
+                    <h3>🔍 Black-Box Execution Trace</h3>
+                    <table class="exec-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Partition/Rule</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exec-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="showTab('client', event)">
+                <span class="tab-icon">👤</span>
+                <span class="tab-text">Client</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('room', event)">
+                <span class="tab-icon">🚪</span>
+                <span class="tab-text">Room</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('reservation', event)">
+                <span class="tab-icon">📅</span>
+                <span class="tab-text">Reservation</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('game', event)">
+                <span class="tab-icon">🎮</span>
+                <span class="tab-text">Game</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('score', event)">
+                <span class="tab-icon">🏆</span>
+                <span class="tab-text">Score</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('final', event)">
+                <span class="tab-icon">📊</span>
+                <span class="tab-text">Final Dashboard</span>
+            </button>
+        </nav>
+
+        <!-- CLIENT FORM -->
+        <div id="client-tab" class="tab-content active">
+            <div class="card">
+                <h2>👤 Client Registration</h2>
+
+                <form id="client-form" onsubmit="validateClient(event)">
+                    <div class="form-group">
+                        <label for="client-name">Name *</label>
+                        <input type="text" id="client-name" placeholder="Enter client name (1-100 characters)">
+                        <span class="hint">Valid: 1-100 characters</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="client-email">Email *</label>
+                        <input type="text" id="client-email" placeholder="Enter email (user@domain.ext)">
+                        <span class="hint">Valid: Must contain @ and domain</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="client-age">Age *</label>
+                        <input type="number" id="client-age" placeholder="Enter age (18-99)">
+                        <span class="hint">Valid: 18-99 years (BVA: 18, 19, 98, 99)</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Validate Client</button>
+                </form>
+
+                <div id="client-result" class="result"></div>
+            </div>
+        </div>
+
+        <!-- ROOM FORM -->
+        <div id="room-tab" class="tab-content">
+            <!-- Animated Room Preview -->
+            <div class="room-preview-container">
+                <div class="room-3d">
+                    <div class="room-wall wall-back">
+                        <div class="wall-decoration">
+                            <div class="clock">🕐</div>
+                            <div class="painting">🖼️</div>
+                        </div>
+                    </div>
+                    <div class="room-wall wall-left">
+                        <div class="door-frame">
+                            <div class="door" id="animated-door">
+                                <div class="door-handle">🔓</div>
+                                <div class="door-lock">🔐</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="room-wall wall-right">
+                        <div class="shelf">
+                            <div class="shelf-item">📚</div>
+                            <div class="shelf-item">🔑</div>
+                            <div class="shelf-item">🕯️</div>
+                        </div>
+                    </div>
+                    <div class="room-floor">
+                        <div class="floor-pattern"></div>
+                    </div>
+                    <div class="room-ceiling">
+                        <div class="chandelier">💡</div>
+                    </div>
+                </div>
+                <div class="room-status-display">
+                    <div class="status-item">
+                        <span class="status-icon">🚪</span>
+                        <span class="status-label">Room Status:</span>
+                        <span class="status-value" id="room-status-display">Locked</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-icon">👥</span>
+                        <span class="status-label">Capacity:</span>
+                        <span class="status-value" id="capacity-display">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-icon">⚡</span>
+                        <span class="status-label">Difficulty:</span>
+                        <span class="status-value" id="difficulty-display">Unknown</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card room-config-card">
+                <h2>🚪 Room Configuration</h2>
+                <p class="info">Configure your escape room and watch it come to life!</p>
+
+                <form id="room-form" onsubmit="validateRoom(event)">
+                    <div class="form-group">
+                        <label for="room-name">
+                            <span class="label-icon">📝</span> Room Name *
+                        </label>
+                        <input type="text" id="room-name" placeholder="Enter room name (1-50 characters)"
+                            oninput="updateRoomPreview()">
+                        <span class="hint">Valid: 1-50 characters</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="room-capacity">
+                            <span class="label-icon">👥</span> Capacity *
+                        </label>
+                        <div class="capacity-selector">
+                            <button type="button" class="capacity-btn" onclick="adjustCapacity(-1)">➖</button>
+                            <input type="number" id="room-capacity" placeholder="2-10" min="2" max="10" value="2"
+                                oninput="updateRoomPreview()">
+                            <button type="button" class="capacity-btn" onclick="adjustCapacity(1)">➕</button>
+                        </div>
+                        <span class="hint">Valid: 2-10 players (BVA: 2, 3, 9, 10)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="room-level">
+                            <span class="label-icon">⚡</span> Difficulty Level *
+                        </label>
+                        <div class="difficulty-buttons">
+                            <button type="button" class="difficulty-btn" data-level="EASY"
+                                onclick="selectDifficulty('EASY')">
+                                <span class="diff-icon">😊</span>
+                                <span class="diff-text">EASY</span>
+                            </button>
+                            <button type="button" class="difficulty-btn" data-level="MEDIUM"
+                                onclick="selectDifficulty('MEDIUM')">
+                                <span class="diff-icon">😐</span>
+                                <span class="diff-text">MEDIUM</span>
+                            </button>
+                            <button type="button" class="difficulty-btn" data-level="HARD"
+                                onclick="selectDifficulty('HARD')">
+                                <span class="diff-icon">😈</span>
+                                <span class="diff-text">HARD</span>
+                            </button>
+                        </div>
+                        <select id="room-level" style="display: none;" onchange="updateRoomPreview()">
+                            <option value="">-- Select Level --</option>
+                            <option value="EASY">Easy</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="HARD">Hard</option>
+                        </select>
+                        <span class="hint">Valid: EASY, MEDIUM, HARD</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="availability-toggle">
+                            <input type="checkbox" id="room-availability" checked onchange="updateRoomPreview()">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">
+                                <span class="toggle-icon">🔓</span>
+                                <span class="toggle-text">Room Available</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-room-validate">
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Validate Room Configuration</span>
+                    </button>
+                </form>
+
+                <div id="room-result" class="result"></div>
+            </div>
+        </div>
+
+        <!-- RESERVATION FORM -->
+        <div id="reservation-tab" class="tab-content">
+            <div class="card">
+                <h2>📅 Reservation Booking</h2>
+                <p class="info">Test Decision Table and State Transitions</p>
+
+                <form id="reservation-form" onsubmit="validateReservation(event)">
+                    <div class="form-group">
+                        <label for="res-client-age">Client Age *</label>
+                        <input type="number" id="res-client-age" placeholder="Enter client age">
+                        <span class="hint">Must be ≥ 18</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="res-room-capacity">Room Capacity *</label>
+                        <input type="number" id="res-room-capacity" value="6" placeholder="Room capacity">
+                        <span class="hint">Room's maximum capacity</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="res-room-available" checked>
+                            Room Available
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="res-date">Reservation Date *</label>
+                        <input type="datetime-local" id="res-date">
+                        <span class="hint">Must be in the future</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="res-players">Number of Players *</label>
+                        <input type="number" id="res-players" placeholder="Enter number of players">
+                        <span class="hint">Must be ≤ room capacity</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Validate Reservation</button>
+                </form>
+
+                <div id="reservation-result" class="result"></div>
+
+                <div class="state-transitions">
+                    <h3>State Transitions</h3>
+                    <div class="state-machine">
+                        <div class="state-row">
+                            <button class="state-btn" onclick="testReservationState('PENDING')">PENDING</button>
+                            <span class="arrow">→</span>
+                            <button class="state-btn" onclick="testReservationState('CONFIRMED')">CONFIRMED</button>
+                            <span class="arrow">→</span>
+                            <button class="state-btn" onclick="testReservationState('COMPLETED')">COMPLETED</button>
+                        </div>
+                        <div class="state-row">
+                            <span class="arrow-down">↓</span>
+                            <span></span>
+                            <span class="arrow-down">↓</span>
+                        </div>
+                        <div class="state-row">
+                            <span></span>
+                            <button class="state-btn cancelled">CANCELLED</button>
+                        </div>
+                    </div>
+                    <div id="state-result" class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME FORM -->
+        <div id="game-tab" class="tab-content">
+            <div class="card">
+                <h2>🎮 Game Session</h2>
+                <p class="info">Test Decision Table and State Transitions</p>
+
+                <form id="game-form" onsubmit="validateGame(event)">
+                    <div class="form-group">
+                        <label for="game-duration">Duration (minutes) *</label>
+                        <input type="number" id="game-duration" placeholder="Enter duration (30-120)">
+                        <span class="hint">Valid: 30-120 minutes (BVA: 30, 31, 119, 120)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="game-score">Score *</label>
+                        <input type="number" id="game-score" placeholder="Enter score (0-1000)">
+                        <span class="hint">Valid: 0-1000 points</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="game-state">Game State *</label>
+                        <select id="game-state">
+                            <option value="">-- Select State --</option>
+                            <option value="NOT_STARTED">Not Started</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="PAUSED">Paused</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="FAILED">Failed</option>
+                        </select>
+                        <span class="hint">Valid states for game lifecycle</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Validate Game</button>
+                </form>
+
+                <div id="game-result" class="result"></div>
+
+                <div class="decision-table">
+                    <h3>Game Completion Decision Table</h3>
+                    <div class="dt-inputs">
+                        <div class="form-group">
+                            <label for="dt-time">Time Remaining (minutes)</label>
+                            <input type="number" id="dt-time" placeholder="0 or more">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="dt-puzzles">
+                                All Puzzles Solved
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="dt-score">Score</label>
+                            <input type="number" id="dt-score" placeholder="0-1000">
+                        </div>
+                        <button class="btn-secondary" onclick="evaluateGameCompletion()">Evaluate Completion</button>
+                    </div>
+                    <div id="dt-result" class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCORE FORM -->
+        <div id="score-tab" class="tab-content">
+            <div class="card">
+                <h2>⭐ Score Recording</h2>
+
+                <form id="score-form" onsubmit="validateScore(event)">
+                    <div class="form-group">
+                        <label for="score-points">Points Obtained *</label>
+                        <input type="number" id="score-points" placeholder="Enter points (0-1000)">
+                        <span class="hint">Valid: 0-1000 points (BVA: 0, 1, 999, 1000)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Success Status *</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="score-success" value="true">
+                                Success
+                            </label>
+                            <label>
+                                <input type="radio" name="score-success" value="false">
+                                Failure
+                            </label>
+                        </div>
+                        <span class="hint">Required: Select success or failure</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Validate Score</button>
+                </form>
+
+                <div id="score-result" class="result"></div>
+            </div>
+        </div>
+
+        <!-- FINAL DASHBOARD TAB -->
+        <div id="final-tab" class="tab-content">
+            <div class="card dashboard-card">
+                <div class="dashboard-header">
+                    <h2>📊 System-Wide Testing Dashboard</h2>
+                    <div class="dashboard-actions">
+                        <button class="btn-secondary" onclick="exportTestData()">📥 Export JSON</button>
+                        <button class="btn-secondary cancelled" onclick="clearTestData()">🗑️ Clear Data</button>
+                    </div>
+                </div>
+                <p class="info">Consolidated view of all black-box tests performed across all services.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-clients">0</span>
+                        <span class="stat-label">Clients Tested</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-rooms">0</span>
+                        <span class="stat-label">Rooms Configured</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-reservations">0</span>
+                        <span class="stat-label">Reservations</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-total-tests">0</span>
+                        <span class="stat-label">Total Validations</span>
+                    </div>
+                </div>
+
+                <div class="summary-table-container">
+                    <table class="summary-table" id="final-summary-table">
+                        <thead>
+                            <tr>
+                                <th>Client / Entity</th>
+                                <th>Service/Component</th>
+                                <th>Validation Type</th>
+                                <th>Result</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summary-body">
+                            <!-- Populated dynamically -->
+                            <tr>
+                                <td colspan="5" class="empty-state">No test data collected yet. Start validating
+                                    components!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="client-reports" id="client-reports">
+                    <!-- Detailed cards per client will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p class="footer-title">🧪 Black-Box Testing Project 🧪</p>
+                <p class="footer-subtitle">Software Testing Course - The Ultimate Challenge</p>
+                <div class="footer-techniques">
+                    <span class="technique-badge">📊 Equivalence Partitioning</span>
+                    <span class="technique-badge">📈 Boundary Value Analysis</span>
+                    <span class="technique-badge">🎯 Decision Tables</span>
+                    <span class="technique-badge">🔄 State Transitions</span>
+                </div>
+                <p class="footer-warning">⚠️ All tests must pass to escape ⚠️</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="validation.js"></script>
+</body>
+
+</html>
